@@ -25,12 +25,21 @@ def test_SGD_minimize():
     Z = func(X, Y)
     ### data area > ###
     ### plt figure < ###
-    fig = plt.figure('test_SGD_minimize')
-    ax = fig.add_subplot(1, 1, 1, projection='3d')
+    fig = plt.figure('SGD minimize')
+    # maximize figure
+    mng = plt.get_current_fig_manager()
+    mng.window.showMaximized()
+    # left subplot
+    ax = fig.add_subplot(1, 2, 1, projection='3d', title='SGD minimize')
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
     ax.plot_surface(X, Y, Z, cmap=plt.cm.gist_earth)
+    # right subplot
+    rax = fig.add_subplot(1, 2, 2, title='contour view')
+    rax.set_xlabel('x')
+    rax.set_ylabel('y')
+    rax.contour(X, Y, Z, zdim='z', cmap=plt.cm.gist_earth)
     # set view port
     ax.view_init(elev=66., azim=56.)
     ### plt figure > ###
@@ -49,12 +58,13 @@ def test_SGD_minimize():
         weights = sgd_optimizer.optimize_once()
         #  print(optimize_func(weights))
         ax.plot([tmp[0], weights[0]], [tmp[1], weights[1]], [optimize_func(tmp), optimize_func(weights)], c='r')
+        rax.plot([tmp[0], weights[0]], [tmp[1], weights[1]], c='r')
         print('step {}:{}'.format(step+1, optimize_func(weights)))
     
     ### gradient descent > ###
     print('\n', '-'*20, 'optimize end', '-'*20)
     plt.ioff()
-    plt.savefig('test_case1.png')
+    plt.savefig('SGD minimize.png')
     plt.show()
 
 
@@ -66,12 +76,21 @@ def test_SGD_maximize():
     Z = func(X, Y)
     ### data area > ###
     ### plt figure < ###
-    fig = plt.figure('test_SGD_maximize')
-    ax = fig.add_subplot(1, 1, 1, projection='3d')
+    fig = plt.figure('SGD maximize')
+    # maximize figure
+    mng = plt.get_current_fig_manager()
+    mng.window.showMaximized()
+    # left subplot
+    ax = fig.add_subplot(1, 2, 1, projection='3d', title='SGD maximize')
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
     ax.plot_surface(X, Y, Z, cmap=plt.cm.gist_earth)
+    # right subplot
+    rax = fig.add_subplot(1, 2, 2, title='contour view')
+    rax.set_xlabel('x')
+    rax.set_ylabel('y')
+    rax.contour(X, Y, Z, zdim='z', cmap=plt.cm.gist_earth)
     # set view port
     ax.view_init(elev=66., azim=56.)
     ### plt figure > ###
@@ -90,17 +109,18 @@ def test_SGD_maximize():
         weights = sgd_optimizer.optimize_once()
         #  print(optimize_func(weights))
         ax.plot([tmp[0], weights[0]], [tmp[1], weights[1]], [optimize_func(tmp), optimize_func(weights)], c='r')
+        rax.plot([tmp[0], weights[0]], [tmp[1], weights[1]], c='r')
         print('step {}:{}'.format(step+1, optimize_func(weights)))
     
     ### gradient descent > ###
     print('\n', '-'*20, 'optimize end', '-'*20)
     plt.ioff()
-    plt.savefig('test_case2.png')
+    plt.savefig('SGD maximize.png')
     plt.show()
     
     
 if __name__ == '__main__':
     test_SGD_minimize()
-    test_SGD_maximize()
+    #test_SGD_maximize()
     
     
