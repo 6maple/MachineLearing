@@ -39,7 +39,8 @@ def test_SGD_minimize():
     rax = fig.add_subplot(1, 2, 2, title='contour view')
     rax.set_xlabel('x')
     rax.set_ylabel('y')
-    rax.contour(X, Y, Z, zdim='z', cmap=plt.cm.gist_earth)
+    rax.contourf(X, Y, Z, zdim='z', cmap=plt.cm.gist_earth)
+    rax.contour(X, Y, Z, zdim='z', colors='black')
     # set view port
     ax.view_init(elev=66., azim=56.)
     ### plt figure > ###
@@ -90,7 +91,8 @@ def test_SGD_maximize():
     rax = fig.add_subplot(1, 2, 2, title='contour view')
     rax.set_xlabel('x')
     rax.set_ylabel('y')
-    rax.contour(X, Y, Z, zdim='z', cmap=plt.cm.gist_earth)
+    rax.contourf(X, Y, Z, zdim='z', cmap=plt.cm.gist_earth)
+    rax.contour(X, Y, Z, zdim='z', colors='black')
     # set view port
     ax.view_init(elev=66., azim=56.)
     ### plt figure > ###
@@ -120,7 +122,7 @@ def test_SGD_maximize():
     
     
 if __name__ == '__main__':
-    test_SGD_minimize()
-    #test_SGD_maximize()
+    #test_SGD_minimize()
+    test_SGD_maximize()
     
     

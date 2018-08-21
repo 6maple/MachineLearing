@@ -7,14 +7,19 @@ class GradientDescentOptimizer:
     """梯度下降优化器
     
     """
-    def __init__(self, learning_rate, batch_size=-1):
+    def __init__(self, learning_rate, batch_size=-1, gradient_func=None):
         """初始化
         
         :param learning_rate:              学习率
         :param batch_size:                 每次优化使用的样本数量
+        :param gradient_func:              计算梯度的函数
         """
         self.learning_rate = learning_rate
         self.batch_size = batch_size
+        if gradient_func:
+            self.gradient_func = gradient_func
+        else:
+            self.gradient_func = GradientDescentOptimizer.estimate_gradient
         self.func = None
         self.weights = None
         self.inputs = None
@@ -63,9 +68,9 @@ class GradientDescentOptimizer:
             inputs = self.inputs
         
         for i in range(len(weights)):
-            self.weights[i] = weights[i] - self.learning_rate * self.estimate_gradient(self.func, weights, i, inputs)
+            self.weights[i] = weights[i] - self.learning_rate * self.gradient_func(self.func, weights, i, inputs)
         
-        return self.weights.copy()
+        return self.weights
     
     @staticmethod
     def estimate_gradient(func, weights, i, inputs, offset=1e-3):
@@ -82,3 +87,48 @@ class GradientDescentOptimizer:
         dweights[i] += offset
         delta = func(dweights, *inputs) - func(weights, *inputs)
         return delta / offset
+        
+
+# TODO 添加牛顿迭代优化器        
+class NewtonOptimizer:
+    """牛顿迭代优化器
+    
+    """
+    def __init__(self, learning_rate, batch_size=-1, gradient_func=None):
+        """初始化
+        
+        :param learning_rate:              学习率
+        :param batch_size:                 每次优化使用的样本数量
+        :param gradient_func:              计算梯度的函数
+        """
+        self.learning_rate = learning_rate
+        self.batch_size = batch_size
+        if gradient_func:
+            self.gradient_func = gradient_func
+        else:
+            self.gradient_func = GradientDescentOptimizer.estimate_gradient
+        self.func = None
+        self.weights = None
+        self.inputs = None
+        
+    def minimize(self, func, weights, inputs):
+        """求最小化func的weights
+        
+        :param func:                       目标函数
+        :param weights:                    需要调整的参数
+        :param inputs:                     目标函数的输入
+        :return: 调整好的参数
+        """
+        self.func = func
+        self.weights = weights
+        self.inputs = inputs
+    
+    def maximize(self, func, weights, inputs):
+        """求最大化func的weights
+        
+        :param func:                       目标函数
+        :param weights:                    需要调整的参数
+        :param inputs:                     目标函数的输入
+        :return: 调整好的参数
+        """
+        return self.minimize(lambda *args, **kwargs: -func(*args, **kwargs), weights, inputs)
